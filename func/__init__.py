@@ -5,6 +5,7 @@ import requests
 
 from .models.stock import stock
 from .crawler import stock_code_details_crawler
+from configuration_manager.reader import reader
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('sosi_func0003_crawler_stock_listing_details function processed a request.')
@@ -12,6 +13,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         stock_obj: stock = stock()
         det_crawler: stock_code_details_crawler = stock_code_details_crawler()
+        config_obj = reader("local.settings.json", "Values")
 
         stock_obj.__dict__ = req.get_json()
         
@@ -27,7 +29,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             'postman-token': "652ec406-7b16-40ca-8436-5baf1d36b793"
         }
 
-        response: requests.Response = requests.request("POST", "**LINK_HERE**", data=json_obj, headers=headers)
-
+        url_to_call = config_obj.get_value("NEXT_SERVICE_TO_CALL")
+        requests.Response = requests.request("POST", url_to_call, data=json_obj, headers=headers)
+        logging.info("'{}' was sent to next step. This service is ready for another request".format(stock_obj.code))
     except ValueError:
         pass
