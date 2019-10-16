@@ -30,7 +30,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         }
 
         url_to_call = config_obj.get_value("NEXT_SERVICE_TO_CALL")
-        requests.Response = requests.request("POST", url_to_call, data=json_obj, headers=headers)
-        logging.info("'{}' was sent to next step. This service is ready for another request".format(stock_obj.code))
+
+        if (url_to_call == ''):
+            logging.warning("There was not a service URL to call, so no action was taken. This service is ready for another request.")    
+        else:
+            requests.Response = requests.request("POST", url_to_call, data=json_obj, headers=headers)
+            logging.info("'{}' was sent to next step. This service is ready for another request".format(stock_obj.code))
     except ValueError:
         pass
