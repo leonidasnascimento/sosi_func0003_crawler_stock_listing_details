@@ -7,13 +7,15 @@ from .models.stock import stock
 from .crawler import stock_code_details_crawler
 from configuration_manager.reader import reader
 
+SETTINGS_FILE_PATH = pathlib.Path(__file__).parent.parent.__str__() + "//local.settings.json"
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('sosi_func0003_crawler_stock_listing_details function processed a request.')
 
     try:
         stock_obj: stock = stock()
         det_crawler: stock_code_details_crawler = stock_code_details_crawler()
-        config_obj = reader("local.settings.json", "Values")
+        config_obj = reader(SETTINGS_FILE_PATH, "Values")
 
         stock_obj.__dict__ = req.get_json()
         
