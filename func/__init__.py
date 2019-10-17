@@ -2,6 +2,7 @@ import logging
 import azure.functions as func
 import json
 import requests
+import pathlib
 
 from .models.stock import stock
 from .crawler import stock_code_details_crawler
