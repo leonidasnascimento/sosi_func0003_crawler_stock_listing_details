@@ -35,7 +35,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         url_to_call = config_obj.get_value("NEXT_SERVICE_TO_CALL")
 
         if (url_to_call == ''):
-            msg = "There was not a service URL to call, so no action was taken. This service is ready for another request."
+            msg = "No service URL found. {} was processed but no further action was taken. This service is ready for another request.".format(stock_obj.code)
 
             logging.warning(msg)    
             return func.HttpResponse(body=msg, status_code=200)
