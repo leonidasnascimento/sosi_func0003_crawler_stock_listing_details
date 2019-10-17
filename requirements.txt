@@ -7,7 +7,7 @@ DateTime==4.3
 idna==2.8
 pytz==2019.3
 requests==2.22.0
-sosi-configuration-manager==0.0.1565983147 -f https://test.pypi.org/simple/
+pip -f https://test.pypi.org/simple/ sosi-configuration-manager==0.0.1565983147
 soupsieve==1.9.4
 typing==3.7.4.1
 urllib3==1.25.6
