@@ -20,6 +20,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         next_service_url: str = config_obj.get_value("NEXT_SERVICE_URL")
         func_key_header: str = config_obj.get_value("X_FUNCTION_KEY")
 
+        ## REMOVE
+        logging.error(next_service_url)
+        logging.error(func_key_header)
+
         stock_obj.__dict__ = req.get_json()
         
         logging.info("Crawling the details for '{}'".format(stock_obj.code))
