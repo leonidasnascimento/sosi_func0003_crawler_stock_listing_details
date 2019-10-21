@@ -17,30 +17,32 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         stock_obj: stock = stock()
         det_crawler: stock_code_details_crawler = stock_code_details_crawler()
         config_obj = reader(SETTINGS_FILE_PATH, "Values")
+        next_service_url: str = config_obj.get_value("NEXT_SERVICE_URL")
+        func_key_header: str = config_obj.get_value("X_FUNCTION_KEY")
 
         stock_obj.__dict__ = req.get_json()
         
         logging.info("Crawling the details for '{}'".format(stock_obj.code))
-        det_crawler.enrich(stock_obj)
+        
+        if not (det_crawler.enrich(stock_obj)):
+            logging.warning("'{}' was not enriched!".format(stock_obj.code))
         
         logging.info("Calling next function for '{}'".format(stock_obj.code))
         json_obj = json.dumps(stock_obj.__dict__)
 
         headers = {
             'content-type': "application/json",
-            'cache-control': "no-cache",
-            'postman-token': "652ec406-7b16-40ca-8436-5baf1d36b793"
+            'x-functions-key': func_key_header,
+            'cache-control': "no-cache"
         }
 
-        url_to_call = config_obj.get_value("NEXT_SERVICE_TO_CALL")
-
-        if (url_to_call == ''):
+        if (next_service_url == ''):
             msg = "No service URL found. {} was processed but no further action was taken. This service is ready for another request.".format(stock_obj.code)
 
             logging.warning(msg)    
             return func.HttpResponse(body=msg, status_code=200)
         else:
-            requests.Response = requests.request("POST", url_to_call, data=json_obj, headers=headers)
+            requests.Response = requests.request("POST", next_service_url, data=json_obj, headers=headers)
             msg = "'{}' was sent to next step. This service is ready for another request".format(stock_obj.code)
             
             logging.info(msg)

@@ -105,3 +105,4 @@ venv.bak/
 
 .python_packages
 sosi_func0003_crawler_stock_listing_details.zip
+local.settings.json

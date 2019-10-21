@@ -12,6 +12,21 @@ class stock_code_details_crawler():
         pass
 
     def enrich(self, stock_ref: stock) -> bool:
+        if not hasattr(stock_ref, "detail"):
+            return False
+        
+        if not hasattr(stock_ref, "stock_name"):
+            return False
+
+        if not hasattr(stock_ref, "isin_code"):
+            return False
+
+        if not hasattr(stock_ref, "stock_type"):
+            return False
+
+        if not hasattr(stock_ref, "currency"):
+            return False
+
         url_det = str(self.stock_det_url).format(stock_ref.code)
         req = urllib3.PoolManager()
         res = req.request('GET', url_det)
